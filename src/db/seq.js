@@ -1,3 +1,8 @@
+/**
+ * @description sequlize配置
+ * @author lqr
+ */
+
 const { Sequelize } = require('sequelize')
 const { MYSQL_CONFIG } = require('../config/db')
 const { isPro, isTest } = require('../utils/env')
@@ -16,4 +21,5 @@ isPro && (config.pool = {
 })
 
 const seq = new Sequelize(database, user, password, config)
+
 module.exports = seq

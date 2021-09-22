@@ -7,9 +7,13 @@ const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const session = require('koa-generic-session')
 const redisStore = require('koa-redis')
+
 const { isPro } = require('./utils/env')
 const { REDIS_CONFIG } = require('./config/db')
 const index = require('./routes/index')
+
+const userViewRouter = require('./routes/view/user')
+const userApiRouter  = require('./routes/api/user')
 const errorViewRouter = require('./routes/view/error')
 
 // error handler
@@ -41,6 +45,8 @@ app.use(session({
 }))
 // routes
 app.use(index.routes(), index.allowedMethods())
+app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
+app.use(userApiRouter.routes(), userApiRouter.allowedMethods())
 // 404  路由必须放在最后
 app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods())
 
