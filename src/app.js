@@ -5,14 +5,17 @@ const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
+const session = require('koa-generic-session')
+const redisStore = require('koa-redis')
 const { isPro } = require('./utils/env')
+const { REDIS_CONFIG } = require('./config/db')
 const index = require('./routes/index')
 const errorViewRouter = require('./routes/view/error')
 
 // error handler
 let onErrorConfig = {}
 // 线上环境重定向到错误界,开发环境显示错误即可 
-isPro && (onErrorConfig = {redirect: '/error'})
+isPro && (onErrorConfig = { redirect: '/error' })
 onerror(app, onErrorConfig)
 
 // middlewares
@@ -22,6 +25,20 @@ app.use(logger())
 app.use(require('koa-static')(__dirname + '/public'))
 app.use(views(__dirname + '/views', { extension: 'ejs' }))
 
+// session配置
+app.keys = ['lQr_123*&#_S'] // 对cookie中weibo.sid的值加密
+app.use(session({
+  key: 'weibo.sid', // cookie name
+  prefix: 'weibo:sess:', // redis key的前缀
+  cookie: {
+    path: '/',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000
+  },
+  store: redisStore({
+    all: `${REDIS_CONFIG.host}:${REDIS_CONFIG.port}`
+  })
+}))
 // routes
 app.use(index.routes(), index.allowedMethods())
 // 404  路由必须放在最后
