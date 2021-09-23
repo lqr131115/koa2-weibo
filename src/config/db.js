@@ -1,5 +1,5 @@
 /**
- * @description 环境遍历
+ * @description 数据库配置
  * @author lqr
  */
 

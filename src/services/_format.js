@@ -3,13 +3,15 @@
  * @author lqr
  */
 
+const { DEFAULT_PICTURE } = require('../config/constant')
+
 /**
  * 设置用户默认头像
  * @param {Objec} obj 用户对象 
  */
 const _formatUserPicture = (obj) => {
   if (!obj.picture) {
-    obj.picture = 'https://img0.baidu.com/it/u=3730772664,138405132&fm=26&fmt=auto'
+    obj.picture = DEFAULT_PICTURE
   }
   return obj
 }

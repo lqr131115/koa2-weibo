@@ -4,18 +4,17 @@
  */
 
 const router = require('koa-router')()
-
 router.prefix('/api/user')
 
-router.get('/register',async (ctx,next) => {
-  await ctx.render('login')
+const { isExist } = require('../../controller/user')
+
+router.post('/register', async (ctx, next) => {
+  await ctx.render('register')
 })
- 
-router.get('/isExist',async (ctx,next) => {
-  const {userName} = ctx.body
-  // 逻辑处理
-  // service
-  // 返回统一格式
+
+router.post('/isExist', async (ctx, next) => {
+  const { userName } = ctx.request.body
+  ctx.body = await isExist(userName)
 })
-   
+
 module.exports = router

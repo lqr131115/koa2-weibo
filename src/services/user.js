@@ -4,7 +4,7 @@
  */
 
 const { User } = require('../db/model/index')
-
+const { formatUser } = require('./_format')
 /**
  * 查询用户信息
  * @param {string} userName 
@@ -19,11 +19,11 @@ const findUserInfo = async (userName, password) => {
   }
 
   const result = await User.findOne({
-    attributes: ['userName', 'nickName', 'picture', 'city'],
+    attributes: ['id', 'userName', 'nickName', 'picture', 'city'],
     where: whereOpt
   })
-
-  return result ? result.dataValues : result
+  
+  return result ? formatUser(result.dataValues) : result
 }
 
 
