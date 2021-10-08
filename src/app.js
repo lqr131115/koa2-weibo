@@ -11,10 +11,11 @@ const redisStore = require('koa-redis')
 const { isPro } = require('./utils/env')
 const { REDIS_CONFIG } = require('./config/db')
 const { SESSION_SECRET_KEY } = require('./config/secretKeys')
-const index = require('./routes/index')
 
 const userViewRouter = require('./routes/view/user')
 const userApiRouter = require('./routes/api/user')
+const blogViewRouter = require('./routes/view/blog')
+const blogApiRouter = require('./routes/api/blog')
 const errorViewRouter = require('./routes/view/error')
 
 // error handler
@@ -45,9 +46,10 @@ app.use(session({
   })
 }))
 // routes
-app.use(index.routes(), index.allowedMethods())
 app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
 app.use(userApiRouter.routes(), userApiRouter.allowedMethods())
+app.use(blogViewRouter.routes(), blogViewRouter.allowedMethods())
+app.use(blogApiRouter.routes(), blogApiRouter.allowedMethods())
 // 404  路由必须放在最后
 app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods())
 
