@@ -57,9 +57,8 @@ const login = async (ctx, userName, password) => {
   if (!useInfo) {
     return new ErrorModel(loginFailInfo)
   }
-  console.log('ctx22', ctx.session)
   if (!ctx.session.userInfo) {
-    ctx.session.useInfo = useInfo
+    ctx.session.userInfo = useInfo
   }
   return new SuccessModel()
 }
