@@ -44,7 +44,7 @@ const changeInfoFailInfo = {
   message: '修改基本信息失败'
 }
 // json schema 校验失败
-const jsonSchemaFileInfo = {
+const jsonSchemaFailInfo = {
   errno: 10009,
   message: '数据格式校验错误'
 }
@@ -83,7 +83,7 @@ module.exports = {
   changePasswordFailInfo,
   uploadFileSizeFailInfo,
   changeInfoFailInfo,
-  jsonSchemaFileInfo,
+  jsonSchemaFailInfo,
   deleteUserFailInfo,
   addFollowerFailInfo,
   deleteFollowerFailInfo,
