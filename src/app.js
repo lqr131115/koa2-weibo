@@ -7,6 +7,8 @@ const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const session = require('koa-generic-session')
 const redisStore = require('koa-redis')
+const koaStatic = require('koa-static')
+const path = require('path')
 
 const { isPro } = require('./utils/env')
 const { REDIS_CONFIG } = require('./config/db')
@@ -17,6 +19,7 @@ const userApiRouter = require('./routes/api/user')
 const blogViewRouter = require('./routes/view/blog')
 const blogApiRouter = require('./routes/api/blog')
 const errorViewRouter = require('./routes/view/error')
+const utilsApiRouter = require('./routes/api/utils')
 
 // error handler
 let onErrorConfig = {}
@@ -28,7 +31,11 @@ onerror(app, onErrorConfig)
 app.use(bodyparser({ enableTypes: ['json', 'form', 'text'] }))
 app.use(json())
 app.use(logger())
-app.use(require('koa-static')(__dirname + '/public'))
+
+// 将public,uploadFiles设置成静态资源目录
+app.use(koaStatic(__dirname + '/public'))
+app.use(koaStatic(path.join(__dirname, '..', 'uploadFiles')))
+
 app.use(views(__dirname + '/views', { extension: 'ejs' }))
 
 // session配置
@@ -50,6 +57,7 @@ app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
 app.use(userApiRouter.routes(), userApiRouter.allowedMethods())
 app.use(blogViewRouter.routes(), blogViewRouter.allowedMethods())
 app.use(blogApiRouter.routes(), blogApiRouter.allowedMethods())
+app.use(utilsApiRouter.routes(), utilsApiRouter.allowedMethods())
 // 404  路由必须放在最后
 app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods())
 
