@@ -10,10 +10,11 @@ const redisStore = require('koa-redis')
 
 const { isPro } = require('./utils/env')
 const { REDIS_CONFIG } = require('./config/db')
+const { SESSION_SECRET_KEY } = require('./config/secretKeys')
 const index = require('./routes/index')
 
 const userViewRouter = require('./routes/view/user')
-const userApiRouter  = require('./routes/api/user')
+const userApiRouter = require('./routes/api/user')
 const errorViewRouter = require('./routes/view/error')
 
 // error handler
@@ -30,7 +31,7 @@ app.use(require('koa-static')(__dirname + '/public'))
 app.use(views(__dirname + '/views', { extension: 'ejs' }))
 
 // session配置
-app.keys = ['lQr_123*&#_S'] // 对cookie中weibo.sid的值加密
+app.keys = [SESSION_SECRET_KEY] // 对cookie中weibo.sid的值加密
 app.use(session({
   key: 'weibo.sid', // cookie name
   prefix: 'weibo:sess:', // redis key的前缀

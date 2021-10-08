@@ -1,15 +1,14 @@
 /**
- * @description 返回数据个格式类
+ * @description 响应数据格式类
  * @author lqr
  */
-
 
 /**
  *  基础模型
  */
 class BaseModel {
-  constructor({ error, data, message }) {
-    this.error = error
+  constructor({ errno, data, message }) {
+    this.errno = errno
     if (data) {
       this.data = data
     }
@@ -26,7 +25,7 @@ class BaseModel {
 class SuccessModel extends BaseModel {
   constructor(data = {}) {
     super({
-      error: 0,
+      errno: 0,
       data
     })
   }
@@ -37,8 +36,8 @@ class SuccessModel extends BaseModel {
  * 未能成功返回数据模型
  */
 class ErrorModel extends BaseModel {
-  constructor({ error, message }) {
-    super({ error, message })
+  constructor({ errno, message }) {
+    super({ errno, message })
   }
 }
 
