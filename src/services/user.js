@@ -17,7 +17,7 @@ const getUserInfo = async (userName, password) => {
   const whereOpt = { userName }
 
   if (password) {
-    Object.assign(whereOpt, { password })
+    Object.assign(whereOpt, { password: doCrypto(password) })
   }
 
   const result = await User.findOne({
