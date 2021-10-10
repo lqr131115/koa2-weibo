@@ -7,10 +7,12 @@ const {
   registerUserNameNotExistInfo,
   registerUserNameExistInfo,
   registerFailInfo,
-  loginFailInfo
+  loginFailInfo,
+  changeInfoFailInfo,
+  changePasswordFailInfo
 } = require('../model/errorInfo')
 const { SuccessModel, ErrorModel } = require('../model/ResModel')
-const { getUserInfo, createUser } = require('../services/user')
+const { getUserInfo, createUser, updateUser } = require('../services/user')
 /**
  * 用户是否存在
  * @param {string} userName 
@@ -63,8 +65,63 @@ const login = async (ctx, userName, password) => {
   return new SuccessModel()
 }
 
+/**
+ * 更改用户信息
+ * @param {Object} ctx
+ * @param {string} nickName 昵称
+ * @param {string} picture 头像
+ * @param {string} city 城市
+ * @returns 
+ */
+const changeInfo = async (ctx, { nickName, picture, city }) => {
+  const { userName } = ctx.session.userInfo
+  if (!nickName) {
+    nickName = userName
+  }
+  const result = await updateUser(
+    {
+      newNickName: nickName,
+      newPicture: picture,
+      newCity: city,
+    },
+    {
+      userName
+    })
+  if (result) {
+    // 更新session中的userInfo
+    Object.assign(ctx.session.userInfo, {
+      nickName, picture, city
+    })
+    return new SuccessModel()
+  }
+  return new ErrorModel(changeInfoFailInfo)
+}
+
+/**
+ * 修改用户密码
+ * @param {string} userName 昵称
+ * @param {string} password 密码
+ * @param {string} newPassword 新密码
+ * @returns 
+ */
+const changePassword = async ({ userName, password, newPassword }) => {
+  const result = await updateUser(
+    { newPassword },
+    {
+      userName,
+      password
+    }
+  )
+  if (result) {
+    return new SuccessModel()
+  }
+  return new ErrorModel(changePasswordFailInfo)
+}
+
 module.exports = {
   isExist,
   register,
-  login
+  login,
+  changeInfo,
+  changePassword
 }

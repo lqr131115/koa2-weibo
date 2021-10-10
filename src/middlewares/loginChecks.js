@@ -27,7 +27,7 @@ const loginCheck =  async (ctx,next) => {
  * @param {object} next 
  * @returns 
  */
-const loginRediret = async (ctx,next) => {
+const loginRedirect = async (ctx,next) => {
   if (ctx.session?.userInfo) {
     await next()
     return
@@ -38,5 +38,5 @@ const loginRediret = async (ctx,next) => {
 }
 module.exports = {
   loginCheck,
-  loginRediret
+  loginRedirect
 }
