@@ -8,7 +8,8 @@ const {
   registerUserNameExistInfo,
   registerFailInfo,
   loginFailInfo,
-  changeInfoFailInfo
+  changeInfoFailInfo,
+  changePasswordFailInfo
 } = require('../model/errorInfo')
 const { SuccessModel, ErrorModel } = require('../model/ResModel')
 const { getUserInfo, createUser, updateUser } = require('../services/user')
@@ -74,7 +75,7 @@ const login = async (ctx, userName, password) => {
  */
 const changeInfo = async (ctx, { nickName, picture, city }) => {
   const { userName } = ctx.session.userInfo
-  if (nickName) {
+  if (!nickName) {
     nickName = userName
   }
   const result = await updateUser(
@@ -86,21 +87,41 @@ const changeInfo = async (ctx, { nickName, picture, city }) => {
     {
       userName
     })
-
   if (result) {
     // 更新session中的userInfo
     Object.assign(ctx.session.userInfo, {
       nickName, picture, city
     })
-    return SuccessModel()
-  } else {
-    return ErrorModel(changeInfoFailInfo)
+    return new SuccessModel()
   }
+  return new ErrorModel(changeInfoFailInfo)
+}
+
+/**
+ * 修改用户密码
+ * @param {string} userName 昵称
+ * @param {string} password 密码
+ * @param {string} newPassword 新密码
+ * @returns 
+ */
+const changePassword = async ({ userName, password, newPassword }) => {
+  const result = await updateUser(
+    { newPassword },
+    {
+      userName,
+      password
+    }
+  )
+  if (result) {
+    return new SuccessModel()
+  }
+  return new ErrorModel(changePasswordFailInfo)
 }
 
 module.exports = {
   isExist,
   register,
   login,
-  changeInfo
+  changeInfo,
+  changePassword
 }

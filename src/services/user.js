@@ -50,7 +50,7 @@ const createUser = async ({ userName, password, gender = 3, nickName }) => {
  * 更新用户
  * @param {object} param0 {newNickName, newPicture, newCity,newPassword}
  * @param {object} param1 { userName, password }
- * @returns 
+ * @returns result => 数组 [1]  1为修改的行数
  */
 const updateUser = async (
   { newNickName, newPicture, newCity, newPassword },
@@ -61,16 +61,15 @@ const updateUser = async (
   if (newNickName) { updateDate.nickName = newNickName }
   if (newPicture) { updateDate.picture = newPicture }
   if (newCity) { updateDate.city = newCity }
-  if (newPassword) { updateDate.password = newPassword }
+  if (newPassword) { updateDate.password = doCrypto(newPassword) }
 
   // 查询条件
   const whereConditions = { userName }
-  if (password) { whereConditions.password = password }
+  if (password) { whereConditions.password = doCrypto(password) }
   const result = await User.update(updateDate, {
     where: whereConditions
   })
 
-  console.log('updateresult', result)
   return result[0] > 0
 }
 module.exports = {
