@@ -118,10 +118,19 @@ const changePassword = async ({ userName, password, newPassword }) => {
   return new ErrorModel(changePasswordFailInfo)
 }
 
+/**
+ * 退出登录
+ * @param {objec} ctx koa2-ctx 
+ */
+const logout = async (ctx) => {
+  delete ctx.session.userInfo
+  return new SuccessModel()
+}
 module.exports = {
   isExist,
   register,
   login,
   changeInfo,
-  changePassword
+  changePassword,
+  logout
 }
