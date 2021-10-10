@@ -46,7 +46,35 @@ const createUser = async ({ userName, password, gender = 3, nickName }) => {
   return result
 }
 
+/**
+ * 更新用户
+ * @param {object} param0 {newNickName, newPicture, newCity,newPassword}
+ * @param {object} param1 { userName, password }
+ * @returns 
+ */
+const updateUser = async (
+  { newNickName, newPicture, newCity, newPassword },
+  { userName, password }
+) => {
+  // 更新内容
+  const updateDate = {}
+  if (newNickName) { updateDate.nickName = newNickName }
+  if (newPicture) { updateDate.picture = newPicture }
+  if (newCity) { updateDate.city = newCity }
+  if (newPassword) { updateDate.password = newPassword }
+
+  // 查询条件
+  const whereConditions = { userName }
+  if (password) { whereConditions.password = password }
+  const result = await User.update(updateDate, {
+    where: whereConditions
+  })
+
+  console.log('updateresult', result)
+  return result[0] > 0
+}
 module.exports = {
   getUserInfo,
-  createUser
+  createUser,
+  updateUser
 }
