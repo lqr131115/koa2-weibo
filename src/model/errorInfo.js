@@ -73,6 +73,11 @@ const deleteBlogFailInfo = {
   errno: 11002,
   message: '删除微博失败，请重试'
 }
+// 删除微博失败
+const serviceBusyInfo = {
+  errno: 11003,
+  message: '服务器繁忙,请稍后再试'
+}
 
 module.exports = {
   registerUserNameExistInfo,
@@ -89,4 +94,5 @@ module.exports = {
   deleteFollowerFailInfo,
   createBlogFailInfo,
   deleteBlogFailInfo,
+  serviceBusyInfo
 }
