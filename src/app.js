@@ -14,6 +14,7 @@ const { isPro } = require('./utils/env')
 const { REDIS_CONFIG } = require('./config/db')
 const { SESSION_SECRET_KEY } = require('./config/secretKeys')
 
+const profileApiRouter = require('./routes/api/blog-profile')
 const userViewRouter = require('./routes/view/user')
 const userApiRouter = require('./routes/api/user')
 const blogViewRouter = require('./routes/view/blog')
@@ -53,6 +54,7 @@ app.use(session({
   })
 }))
 // routes
+app.use(profileApiRouter.routes(), profileApiRouter.allowedMethods())
 app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
 app.use(userApiRouter.routes(), userApiRouter.allowedMethods())
 app.use(blogViewRouter.routes(), blogViewRouter.allowedMethods())

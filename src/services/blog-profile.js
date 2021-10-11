@@ -4,7 +4,8 @@
  */
 
 const { User, Blog } = require('../db/model/index')
-const { formatUser } = require('./_format')
+const { formatUser, formatBlog } = require('./_format')
+
 /**
  * 根据用户名获取博客
  * @param {string} userName 用户名
@@ -33,7 +34,7 @@ const findBlogsByUserName = async ({ userName, pageIndex = 0, pageSize = 10 }) =
   blogList = blogList.map(blog => {
     const user = blog.user.dataValues
     blog.user = formatUser(user)
-    return blog
+    return formatBlog(blog)
   })
   return { blogList, count }
 }

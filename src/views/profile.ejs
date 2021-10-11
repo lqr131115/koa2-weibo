@@ -16,7 +16,6 @@
                     <%- include('widgets/blog-list', {blogList: blogData.blogList})%>
                 </div> 
                 <!-- 加载更多 -->
-                <!-- 加载更多 -->
                 <% if (blogData.count > blogData.blogList.length) { %>
                     <%- include('widgets/load-more', {
                         pageSize: blogData.pageSize,
