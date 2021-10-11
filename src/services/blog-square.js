@@ -11,7 +11,9 @@ const { formatUser, formatBlog } = require('./_format')
  * @param {number} pageIndex 当前页码
  * @param {number} pageSize 每页微博条数
  */
-const findBlogs = async ({ pageIndex = 0, pageSize = 10 }) => {
+const { PAGE_SIZE } = require('../config/constant')
+
+const findBlogs = async ({ pageIndex = 0, pageSize = PAGE_SIZE }) => {
   const { count, rows } = await Blog.findAndCountAll({
     offset: pageIndex * pageSize,
     limit: pageSize,

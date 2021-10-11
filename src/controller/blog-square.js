@@ -3,17 +3,15 @@
  * @author lqr
  */
 
-const { PAGE_SIZE } = require('../config/constant')
 const { SuccessModel } = require('../model/ResModel')
-const { findBlogs } = require('../services/blog-square')
+const { getSquareBlogsCache } = require('../cache/blog')
+const { PAGE_SIZE } = require('../config/constant')
 /**
  * 获取广场微博列表
  * @param {number} pageIndex 列表页码
  */
 const getBlogList = async (pageIndex = 0) => {
-  const { blogList, count } = await findBlogs({
-    pageSize: PAGE_SIZE
-  })
+  const { blogList, count } = await getSquareBlogsCache(pageIndex)
   return new SuccessModel({
     blogList,
     pageIndex,

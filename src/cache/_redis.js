@@ -8,7 +8,7 @@ const redis = require('redis')
 const redisClient = redis.createClient(REDIS_CONFIG.port, REDIS_CONFIG.host)
 
 // 错误处理
-redisClient.on_error({ message: 'redis error' })
+redisClient.on('error', (err) => { console.log(err) })
 
 /**
  * redis set
