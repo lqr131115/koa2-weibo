@@ -33,9 +33,18 @@
             <div class="col-4">
                 <!-- 个人信息 -->
                 <div class="right-item">
-                    <h2>个人信息</h2>
+                    <%- include('widgets/user-info', {
+                        userInfo: userData.userInfo,
+                        isMe: userData.isMe,
+                        amIFollowed: userData.amIFollowed,
+                        atCount: userData.atCount
+                    });%>
                 </div>
                 <!-- 粉丝 -->
+                <%- include('widgets/fans', {
+                    count: userData.fansData.count,
+                    userList: userData.fansData.list
+                })%>
                 <!-- 关注 -->
             </div>
             <!-- 右侧 结束 -->
