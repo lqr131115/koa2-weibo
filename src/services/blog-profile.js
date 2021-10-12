@@ -25,7 +25,7 @@ const findBlogsByUserName = async ({ userName, pageIndex = 0, pageSize = 10 }) =
     ],
     include: {
       model: User,
-      attributes: ['userName', 'nickName', 'picture'],
+      attributes: ['id', 'userName', 'nickName', 'picture'],
       where: userWhereConditons
     }
   }

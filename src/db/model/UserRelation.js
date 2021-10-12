@@ -10,12 +10,12 @@ const UserRelation = seq.define('userRelation',{
   userId:{
     type:INTEGER,
     allowNull:false,
-    comment:'用户(我的) id'
+    comment:'关注者的 id'
   },
   follwerId:{
     type:INTEGER,
     allowNull:false,
-    comment:'粉丝 Id'
+    comment:'被关注者的 Id'
   }
 })
 

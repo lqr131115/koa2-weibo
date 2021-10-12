@@ -12,11 +12,11 @@ Blog.belongsTo(User, {
 })
 
 UserRelation.belongsTo(User, {
-  foreignKey: 'userId'
+  foreignKey: 'follwerId'
 })
 
 User.hasMany(UserRelation, {
-  foreignKey: 'follwerId'
+  foreignKey: 'userId'
 })
 
 module.exports = { User, Blog, UserRelation }
