@@ -6,6 +6,7 @@
 const { User } = require('../db/model/index')
 const { doCrypto } = require('../utils/crypto')
 const { formatUser } = require('./_format')
+const { createUserRelation } = require('./user-relation')
 
 /**
  * 查询用户信息
@@ -43,7 +44,12 @@ const createUser = async ({ userName, password, gender = 3, nickName }) => {
     gender,
     nickName: nickName || userName,
   })
-  return result
+
+  // 自己关注自己  便于首页一起显示自己和关注对象的微博,即只展示关注对象的微博
+  const data = result.dataValues
+  await createUserRelation(data.id, data.id)
+
+  return data
 }
 
 /**

@@ -3,9 +3,10 @@
  * @author lqr
  */
 
+const { PAGE_SIZE } = require('../config/constant')
 const { createBlogFailInfo } = require('../model/errorInfo')
 const { SuccessModel, ErrorModel } = require('../model/ResModel')
-const { createBlog } = require('../services/blog')
+const { createBlog, findAllFollwersBlogs } = require('../services/blog')
 
 /**
  * 发表微博
@@ -24,6 +25,25 @@ const publishBlog = async ({ userId, content, image }) => {
   }
 }
 
+
+/**
+ * 获取首页微博(包括自己和关注人的微博)
+ * @param {number} userId 当前登录用户的 id 
+ * @param {number} pageIndex 列表每页大小
+ */
+const getBlogList = async (userId, pageIndex = 0) => {
+  const { blogList, count } = await findAllFollwersBlogs({ userId, pageIndex, pageSize: PAGE_SIZE })
+  return new SuccessModel({
+    blogList,
+    pageIndex,
+    pageSize: PAGE_SIZE,
+    count,
+    isEmpty: blogList.length === 0
+  })
+
+}
+
 module.exports = {
-  publishBlog
+  publishBlog,
+  getBlogList
 }

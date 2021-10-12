@@ -7,12 +7,48 @@
 const router = require('koa-router')()
 const { getBlogList: getProfileBlogList } = require('../../controller/blog-profile')
 const { getBlogList: getSquareBlogList } = require('../../controller/blog-square')
+const { getBlogList: getHomeBlogList } = require('../../controller/blog')
 const { getFansList, getFollwersList } = require('../../controller/user-relation')
 const { isExist } = require('../../controller/user')
 const { loginRedirect } = require('../../middlewares/loginChecks')
 
 router.get('/', loginRedirect, async (ctx, next) => {
-  await ctx.render('index')
+
+  let myUserInfo = ctx.session.userInfo
+  const { id } = myUserInfo
+
+
+  // 微博列表数据
+  const result = await getHomeBlogList(id)
+  const { count, blogList, pageIndex, pageSize, isEmpty } = result.data   // result 是 SuccessModel 类的实例
+
+  // 粉丝列表
+  const { data: fansData } = await getFansList(id)
+
+  // 关注列表
+  const { data: followersData } = await getFollwersList(id)
+
+  await ctx.render('index', {
+    blogData: {
+      isEmpty,
+      blogList,
+      pageSize,
+      pageIndex,
+      count,
+    },
+    userData: {
+      userInfo: myUserInfo,
+      atCount: 0,
+      fansData: {
+        count: fansData.count,
+        list: fansData.userList,
+      },
+      followersData: {
+        count: followersData.count,
+        list: followersData.userList
+      }
+    }
+  })
 })
 
 // 重定向至个人主页
