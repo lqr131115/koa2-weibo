@@ -14,7 +14,8 @@ const { formatBlog, formatUser } = require('./_format')
 const findAtMeBlogsCountByUserId = async (userId) => {
   const { count } = await AtRelation.findAndCountAll({
     where: {
-      userId
+      userId,
+      isRead: false
     }
   })
   return { count }
@@ -57,7 +58,35 @@ const findAtMeBlogs = async (userId, pageIndex = 0, pageSize = PAGE_SIZE) => {
   return { blogList, count }
 }
 
+/**
+ * 更新 @ 我的微博 已读状态
+ * @param {number} userId  用户 id
+ * @param {number} blogId  微博 id
+ */
+const updateIsRead = async ({ newIsRead }, { userId, isRead }) => {
+  // 拼接更新内容
+  const updateData = {}
+  if (newIsRead) {
+    updateData.isRead = newIsRead
+  }
+
+  // 拼接更新条件
+  const whereData = {}
+  if (userId) {
+    whereData.userId = userId
+  }
+  if (isRead) {
+    whereData.isRead = isRead
+  }
+
+  // 执行更新
+  const result = await AtRelation.update(updateData, {
+    where: whereData
+  })
+  return result[0] > 0
+}
 module.exports = {
   findAtMeBlogsCountByUserId,
-  findAtMeBlogs
+  findAtMeBlogs,
+  updateIsRead
 }

@@ -7,7 +7,7 @@ const router = require('koa-router')()
 const { getBlogList: getProfileBlogList } = require('../../controller/blog-profile')
 const { getBlogList: getSquareBlogList } = require('../../controller/blog-square')
 const { getBlogList: getHomeBlogList } = require('../../controller/blog')
-const { getAtMeBlogList } = require('../../controller/blog-at')
+const { getAtMeBlogList, markAsRead } = require('../../controller/blog-at')
 const { getFansList, getFollwersList } = require('../../controller/user-relation')
 const { isExist } = require('../../controller/user')
 const { getAtMeCount } = require('../../controller/blog-at')
@@ -170,7 +170,10 @@ router.get('/at-me', loginRedirect, async (ctx, next) => {
   })
 
   // 标记已读
-  
+  if (atMeCountData.count > 0) {
+    await markAsRead(id)
+  }
+
 })
 
 module.exports = router
