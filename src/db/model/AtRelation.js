@@ -3,7 +3,6 @@
  * @author lqr
  */
 
-
 const seq= require('../seq')
 const {INTEGER,BOOLEAN} = require('../types')
 const AtRelation = seq.define('atrelation',{
