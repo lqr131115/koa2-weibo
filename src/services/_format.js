@@ -3,7 +3,7 @@
  * @author lqr
  */
 
-const { DEFAULT_PICTURE } = require('../config/constant')
+const { DEFAULT_PICTURE, REG_FOR_AR_WHO } = require('../config/constant')
 const { timeFormat } = require('../utils/dt')
 
 /**
@@ -33,6 +33,24 @@ const formatUser = (list) => {
   return _formatUserPicture(list)
 }
 
+
+/**
+ * 格式化微博内容
+ * @param {object} obj 实体对象
+ * @returns 
+ */
+const _formatContent = (obj) => {
+  obj.contentFormat = obj.content
+
+  // 格式化 @
+  // from '哈喽 @张三 - zhangsan 你好'
+  // to '哈喽 <a href="/profile/zhangsan">张三</a> 你好'
+  obj.contentFormat = obj.contentFormat.replace(
+    REG_FOR_AR_WHO,
+    (matchStr, nickName, userName) => `<a href="/profile/${userName}">@${nickName}</a>`)
+  return obj
+}
+
 /**
  * 格式化数据库时间数据的格式
  * @param {object} obj 实体对象
@@ -55,11 +73,12 @@ const formatBlog = (list) => {
   }
 
   if (Array.isArray(list)) {
-    return list.map(_formatDBTime)
+    return list.map(_formatDBTime).map(_formatContent)
   }
 
   let result = list
   result = _formatDBTime(result)
+  result = _formatContent(result)
   return result
 }
 

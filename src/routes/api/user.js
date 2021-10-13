@@ -10,6 +10,7 @@ const { isExist, register, login, changeInfo, changePassword, logout } = require
 const { loginCheck } = require('../../middlewares/loginChecks')
 const { genValidator } = require('../../middlewares/validator')
 const { userValidate } = require('../../validator/user')
+const { getFollwersList } = require('../../controller/user-relation')
 
 // 用户是否已经存在 
 router.post('/isExist', async (ctx, next) => {
@@ -47,4 +48,12 @@ router.post('/logout', loginCheck, async (ctx, next) => {
   ctx.body = await logout(ctx)
 })
 
+// 获取关注人列表
+router.get('/getAtList', loginCheck, async (ctx, next) => {
+  const { id } = ctx.session.userInfo
+  const result = await getFollwersList(id)
+  let { userList } = result.data
+  const list = userList.map(user => `${user.nickName}-${user.userName}`)
+  ctx.body = list
+})
 module.exports = router
