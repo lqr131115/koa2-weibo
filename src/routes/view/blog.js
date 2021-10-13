@@ -3,21 +3,21 @@
  * @author lqr
  */
 
-
 const router = require('koa-router')()
 const { getBlogList: getProfileBlogList } = require('../../controller/blog-profile')
 const { getBlogList: getSquareBlogList } = require('../../controller/blog-square')
 const { getBlogList: getHomeBlogList } = require('../../controller/blog')
+const { getAtMeBlogList } = require('../../controller/blog-at')
 const { getFansList, getFollwersList } = require('../../controller/user-relation')
 const { isExist } = require('../../controller/user')
 const { getAtMeCount } = require('../../controller/blog-at')
 const { loginRedirect } = require('../../middlewares/loginChecks')
 
+// 首页
 router.get('/', loginRedirect, async (ctx, next) => {
 
   let myUserInfo = ctx.session.userInfo
   const { id } = myUserInfo
-
 
   // 微博列表数据
   const result = await getHomeBlogList(id)
@@ -144,6 +144,33 @@ router.get('/square', loginRedirect, async (ctx, next) => {
       count,
     }
   })
+})
+
+// @ 我的
+router.get('/at-me', loginRedirect, async (ctx, next) => {
+
+  let { id } = ctx.session.userInfo
+
+  // 微博列表数据
+  const result = await getAtMeBlogList(id)
+  const { count, blogList, pageIndex, pageSize, isEmpty } = result.data   // result 是 SuccessModel 类的实例
+
+  // @ 我的数量 
+  const { data: atMeCountData } = await getAtMeCount(id)
+
+  await ctx.render('atMe', {
+    blogData: {
+      isEmpty,
+      blogList,
+      pageSize,
+      pageIndex,
+      count,
+    },
+    atCount: atMeCountData.count,
+  })
+
+  // 标记已读
+  
 })
 
 module.exports = router

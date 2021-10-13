@@ -2,7 +2,7 @@
 
 <div class="container margin-top-20">
     <div class="row">
-        <!-- 左侧 -->
+        <!-- 左侧 开始-->
         <div class="col-8">
             <h4 class="padding-bottom-10">
                 @ 提到我的 (<%= atCount%> 未读)
@@ -22,7 +22,7 @@
                         blogList: blogData.blogList,
                         canReply: true
                     })%>
-                </div> <!-- 微博列表 结束 -->
+                </div>
                 <!-- 加载更多 -->
                 <% if (blogData.count > blogData.blogList.length) { %>
                     <%- include('widgets/load-more', {
@@ -32,10 +32,10 @@
                         containerSelector: '#container-weibo-list',
                         api: '/api/atMe/loadMore',
                     })%>
-                <% } %> <!-- 加载更多 结束 -->
+                <% } %>
             <% } %>
-
-        </div> <!-- 左侧结束 -->
+        </div>
+        <!-- 左侧 结束-->
     </div>
 </div>
 
